@@ -319,7 +319,7 @@ plugins/deeplit/                       The plugin (no build step, no package.jso
 
 Plugin problems (install, skills, credential helper): open an issue at [github.com/deeplitAI/deeplit-mcp-server/issues](https://github.com/deeplitAI/deeplit-mcp-server/issues) and include the `request_id` of the failed call. Account, key, or platform problems: contact deeplit through [deeplit.ai](https://deeplit.ai).
 
-Pull requests are welcome. Conventions for contributors and coding agents are in [AGENTS.md](./AGENTS.md); run `claude plugin validate ./plugins/deeplit --strict` after editing manifests and before opening one.
+Pull requests are welcome; `main` is protected, so every change lands through a reviewed pull request. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the flow and [AGENTS.md](./AGENTS.md) for the conventions; run `claude plugin validate ./plugins/deeplit --strict` after editing manifests and before opening one.
 
 ## License
 
