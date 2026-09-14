@@ -1,0 +1,75 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Manifests are valid JSON
+        run: |
+          for f in plugins/deeplit/plugin.json plugins/deeplit/.claude-plugin/plugin.json plugins/deeplit/.codex-plugin/plugin.json .claude-plugin/marketplace.json .agents/plugins/marketplace.json; do
+            python3 -m json.tool "$f" >/dev/null && echo "ok  $f"
+          done
+
+      - name: Manifests agree on name and version
+        run: |
+          python3 - <<'PY'
+          import json
+          g=json.load(open('plugins/deeplit/plugin.json'))
+          c=json.load(open('plugins/deeplit/.claude-plugin/plugin.json'))
+          x=json.load(open('plugins/deeplit/.codex-plugin/plugin.json'))
+          m=json.load(open('.claude-plugin/marketplace.json'))['plugins'][0]
+          names={g['name'],c['name'],x['name'],m['name']}
+          assert names=={'deeplit'}, names
+          assert g['version']==c['version']==m['version'], (g['version'],c['version'],m['version'])
+          assert x['version'].split('+')[0]==g['version'], x['version']
+          assert '$schema' not in g, 'plugins/deeplit/plugin.json must not carry an agent-plugins $schema (Codex would ignore the Codex manifest)'
+          assert isinstance(x.get('mcpServers'),dict) and 'deeplit' in x['mcpServers'], 'Codex MCP server must be declared inline'
+          assert x['mcpServers']['deeplit']['url']=='https://mcp.deeplit.ai'
+          assert c['userConfig']['mcp_url']['default']=='https://mcp.deeplit.ai'
+          print('ok  name', names.pop(), 'version', g['version'])
+          PY
+
+      - name: No plugin-root .mcp.json, no keys, no dev address
+        run: |
+          test ! -e plugins/deeplit/.mcp.json || { echo "plugins/deeplit/.mcp.json must not exist (Claude Code would double-register the server)"; exit 1; }
+          ! grep -rnE 'dk_core_[A-Za-z0-9_-]{16,}|ak_[A-Za-z0-9]{24,}' --exclude-dir=.git . || { echo "key-shaped string found"; exit 1; }
+          ! grep -rn '127\.0\.0\.1:8138' --exclude-dir=.git . || { echo "development address found"; exit 1; }
+          echo "ok"
+
+      - name: Credential helper parses
+        run: |
+          node --check plugins/deeplit/scripts/deeplit-auth.mjs
+          pwsh -NoProfile -Command '$t=$null;$e=$null;[void][System.Management.Automation.Language.Parser]::ParseFile("plugins/deeplit/scripts/deeplit-auth.ps1",[ref]$t,[ref]$e); if($e){$e|ForEach-Object{$_.ToString()}; exit 1}'
+          echo "ok"
+
+      - name: Claude Code plugin and marketplace validate
+        run: |
+          npm install -g @anthropic-ai/claude-code >/dev/null 2>&1
+          claude plugin validate ./plugins/deeplit --strict
+          claude plugin validate . --strict
+
+      - name: Skills have frontmatter and reference real tool names
+        run: |
+          python3 - <<'PY'
+          import re,glob
+          readme=open('README.md').read()
+          tools=set(re.findall(r'\| `([a-z_]+)` \| [RW] \|', readme))
+          assert len(tools)==41, f'README tool reference lists {len(tools)} tools, expected 41'
+          for p in sorted(glob.glob('plugins/deeplit/skills/*/SKILL.md')):
+              s=open(p).read()
+              assert s.startswith('---\nname: '), f'{p}: missing frontmatter'
+              for t in re.findall(r'`([a-z_]+)`', s):
+                  if re.match(r'^(get|list|create|delete|update|restart|terminate|attach|detach|cold_store)_', t):
+                      assert t in tools, f'{p}: tool {t} is not in the README tool reference'
+              print('ok ', p)
+          PY

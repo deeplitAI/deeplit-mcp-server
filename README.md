@@ -1,5 +1,7 @@
 # deeplit® plugin for Claude Code and Codex
 
+[![validate](https://github.com/deeplitAI/deeplit-mcp-server/actions/workflows/validate.yml/badge.svg)](https://github.com/deeplitAI/deeplit-mcp-server/actions/workflows/validate.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
+
 Connect Claude Code or OpenAI Codex to your deeplit® account through the deeplit MCP server at `https://mcp.deeplit.ai`. deeplit runs private AI inside your perimeter: managed GPU instances that serve open models with vLLM, persistent volumes, and per-instance application users and inference keys. With a scoped platform API key, your coding agent inspects and manages GPU instances, persistent volumes, the model and GPU catalog, wallet and usage data, and per-instance application users and inference keys. This repository contains only the client-side plugin (manifests, five skills, an optional credential helper); deeplit operates the server, a stateless gateway.
 
 - 41 tools: 24 read-only, 17 write (every write requires `confirmed=true`)
@@ -319,7 +321,7 @@ plugins/deeplit/                       The plugin (no build step, no package.jso
 
 Plugin problems (install, skills, credential helper): open an issue at [github.com/deeplitAI/deeplit-mcp-server/issues](https://github.com/deeplitAI/deeplit-mcp-server/issues) and include the `request_id` of the failed call. Account, key, or platform problems: contact deeplit through [deeplit.ai](https://deeplit.ai).
 
-Pull requests are welcome; `main` is protected, so every change lands through a reviewed pull request. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the flow and [AGENTS.md](./AGENTS.md) for the conventions; run `claude plugin validate ./plugins/deeplit --strict` after editing manifests and before opening one.
+Pull requests are welcome; `main` is protected, so every change lands through a reviewed pull request with a green `validate` check. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the flow and [AGENTS.md](./AGENTS.md) for the conventions; run `claude plugin validate ./plugins/deeplit --strict` after editing manifests and before opening one.
 
 ## License
 
