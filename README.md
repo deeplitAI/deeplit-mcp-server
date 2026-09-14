@@ -62,10 +62,10 @@ Non-interactive: `claude plugin install deeplit@deeplit --config mcp_url=https:/
 export DEEPLIT_API_KEY=dk_core_...       # in the shell that starts codex, or in your shell profile
 codex plugin marketplace add deeplitAI/deeplit-mcp-server
 codex plugin add deeplit@deeplit
-codex mcp list                          # deeplit
+codex mcp list                          # deeplit  https://mcp.deeplit.ai  -  enabled  Unknown
 ```
 
-The plugin registers the five skills and the `deeplit` MCP server, which reads `DEEPLIT_API_KEY` from the environment of the `codex` process. Start a new session after installing.
+The plugin registers the five skills and the `deeplit` MCP server, which reads `DEEPLIT_API_KEY` from the environment of the `codex` process. Install before starting `codex`, or start a new session afterwards: tools and skills load at session start. `Auth Unknown` in the listing is normal for API-key servers and appears whether or not the key is set; the smoke test under [Verify](#verify) is what proves the key.
 
 > [!NOTE]
 > Codex passes the launching shell's environment, including `DEEPLIT_API_KEY`, to commands the agent runs. To hide it, add `[shell_environment_policy]` to `~/.codex/config.toml` with `ignore_default_excludes = false` (drops names containing KEY, SECRET, or TOKEN) or `filters = { "DEEPLIT_API_KEY" = "exclude" }`. The MCP header still works because Codex resolves `env_http_headers` from its own process.
@@ -85,7 +85,7 @@ In either client, `/mcp` shows the server. Claude Code lists the skills under `/
 
 ## Skills
 
-Skills are playbooks in [`plugins/deeplit/skills/`](./plugins/deeplit/skills). Claude Code applies them when a request matches; Codex selects them by description. For write prompts, every skill summarizes the change and asks for approval before calling the tool with `confirmed=true`.
+Skills are playbooks in [`plugins/deeplit/skills/`](./plugins/deeplit/skills). Claude Code applies them when a request matches; Codex shows them as `deeplit:<name>` and selects them by description. For write prompts, every skill summarizes the change and asks for approval before calling the tool with `confirmed=true`.
 
 | Skill | Use it for | Guardrails |
 |---|---|---|
@@ -221,7 +221,7 @@ The two gateway `X-API-Key` errors fail the MCP connection itself; every other r
 | 403 on a tool call | Missing scope, or resource owned by another organization | Create a new key with the scope, or check the resource id against `list_instances` / `list_volumes` |
 | 403 `Confirmation is required before ...` | Write tool called without `confirmed=true` | Approve when the agent asks; it retries with `confirmed=true` |
 | `Cold storage is disabled for MCP` | Cold storage is not enabled on the gateway | None; gateway-gated |
-| Nothing changed after install or update | Plugins load on the next session; third-party marketplaces do not auto-update | Claude Code: `/reload-plugins` or restart. Codex: new session. See [Update and uninstall](#update-and-uninstall) |
+| Nothing changed after install or update, or Codex shows no deeplit tools or skills | Plugins load on the next session; third-party marketplaces do not auto-update | Claude Code: `/reload-plugins` or restart. Codex: start a new session (the desktop app included). See [Update and uninstall](#update-and-uninstall) |
 | Codex (helper route): `deeplit` fails to start or is missing from `/mcp` | Node.js not on the `PATH` Codex uses, no key stored, or `set` run without a TTY | Run the helper's `get` in a terminal and read the error; `The API key must start with dk_core_.` (macOS/Linux) or `No deeplit credential is stored` (Windows) means no key is stored, so run `set`. On Linux and Windows use `env_http_headers` |
 
 ## Manual and local setups
