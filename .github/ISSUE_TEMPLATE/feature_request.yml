@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest a change to the plugin, a skill, or the documentation.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you are trying to do
+      description: The task or workflow, and where the plugin falls short today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: A skill, a README section, a manifest option. Server-side changes (new tools, scopes) are tracked by deeplit separately; mention them and we will route them.
