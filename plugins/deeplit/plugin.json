@@ -1,0 +1,12 @@
+{
+  "name": "deeplit",
+  "version": "0.2.0",
+  "description": "Manage deeplit infrastructure and instance services from coding agents.",
+  "author": {
+    "name": "deeplit",
+    "url": "https://deeplit.ai"
+  },
+  "homepage": "https://deeplit.ai",
+  "repository": "https://github.com/deeplitAI/deeplit-mcp-server",
+  "license": "Apache-2.0"
+}

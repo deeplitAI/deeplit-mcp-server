@@ -1,0 +1,33 @@
+{
+  "name": "deeplit",
+  "version": "0.2.0",
+  "description": "Manage deeplit infrastructure and instance services from Claude Code.",
+  "author": {
+    "name": "deeplit"
+  },
+  "userConfig": {
+    "mcp_url": {
+      "type": "string",
+      "title": "deeplit MCP URL",
+      "description": "https://mcp.deeplit.ai for production, or a local URL for development.",
+      "required": true,
+      "default": "https://mcp.deeplit.ai"
+    },
+    "api_key": {
+      "type": "string",
+      "title": "deeplit platform API key",
+      "description": "A scoped platform API key beginning with dk_core_.",
+      "sensitive": true,
+      "required": true
+    }
+  },
+  "mcpServers": {
+    "deeplit": {
+      "type": "http",
+      "url": "${user_config.mcp_url}",
+      "headers": {
+        "X-API-Key": "${user_config.api_key}"
+      }
+    }
+  }
+}

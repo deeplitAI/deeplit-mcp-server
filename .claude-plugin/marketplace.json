@@ -1,0 +1,15 @@
+{
+  "name": "deeplit",
+  "owner": {
+    "name": "deeplit"
+  },
+  "description": "deeplit tools for coding agents.",
+  "plugins": [
+    {
+      "name": "deeplit",
+      "source": "./plugins/deeplit",
+      "description": "Manage deeplit infrastructure and instance services from Claude Code.",
+      "version": "0.2.0"
+    }
+  ]
+}

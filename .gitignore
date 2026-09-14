@@ -1,0 +1,15 @@
+# Private keys
+*.pem
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs
+*.log
+
+# Node.js
+node_modules/
+# IDE
+.idea/

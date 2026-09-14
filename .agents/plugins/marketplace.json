@@ -1,0 +1,20 @@
+{
+  "name": "deeplit",
+  "interface": {
+    "displayName": "deeplit"
+  },
+  "plugins": [
+    {
+      "name": "deeplit",
+      "source": {
+        "source": "local",
+        "path": "./plugins/deeplit"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "DeveloperTools"
+    }
+  ]
+}

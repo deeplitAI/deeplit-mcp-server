@@ -1,0 +1,30 @@
+name: Bug report
+description: Something in the plugin, a skill, or the credential helper does not work.
+labels: [bug]
+body:
+  - type: dropdown
+    id: client
+    attributes:
+      label: Client
+      options: [Claude Code, Codex, Other MCP client]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Client version and OS
+      placeholder: "Claude Code 2.1.270 on macOS 15 / Codex 0.154 on Ubuntu 24.04"
+    validations:
+      required: true
+  - type: dropdown
+    id: route
+    attributes:
+      label: Install route
+      options: [Plugin from GitHub, Plugin from local clone, Manual server config, Credential helper]
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Steps, the exact command or prompt, and the exact error text. Include the request_id from the tool result if there is one. Never paste an API key.
+    validations:
+      required: true

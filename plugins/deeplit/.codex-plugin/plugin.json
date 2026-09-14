@@ -1,0 +1,34 @@
+{
+  "name": "deeplit",
+  "version": "0.2.0+codex.20260911120531",
+  "description": "Manage deeplit infrastructure and instance services from Codex.",
+  "author": {
+    "name": "deeplit"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "deeplit",
+    "shortDescription": "Manage deeplit from Codex.",
+    "longDescription": "Inspect models, manage instances and volumes, review usage and billing, and administer instance access through deeplit MCP.",
+    "developerName": "deeplit",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Show my deeplit instances and their status.",
+      "Find a compatible GPU and model for a new instance.",
+      "Review usage and billing for my running instances."
+    ]
+  },
+  "mcpServers": {
+    "deeplit": {
+      "type": "http",
+      "url": "https://mcp.deeplit.ai",
+      "env_http_headers": {
+        "X-API-Key": "DEEPLIT_API_KEY"
+      }
+    }
+  }
+}
