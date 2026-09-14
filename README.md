@@ -85,7 +85,7 @@ In either client, `/mcp` shows the server. Claude Code lists the skills under `/
 
 ## Skills
 
-Skills are playbooks in [`plugins/deeplit/skills/`](./plugins/deeplit/skills). Claude Code applies them when a request matches; Codex selects them by description. For write prompts, every skill summarizes the change and asks for approval before calling the tool with `confirmed=true`.
+Skills are playbooks in [`plugins/deeplit/skills/`](./plugins/deeplit/skills). Claude Code applies them when a request matches; Codex shows them as `deeplit:<name>` and selects them by description. For write prompts, every skill summarizes the change and asks for approval before calling the tool with `confirmed=true`.
 
 | Skill | Use it for | Guardrails |
 |---|---|---|
